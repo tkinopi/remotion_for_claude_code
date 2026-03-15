@@ -29,23 +29,27 @@ interface BulletListProps {
 
 ## TelopVideo.tsxへの追加方法
 
-### 1. Sequenceを追加
+### 1. telop-data.tsから発話タイミングを特定
+各項目に対応するテロップのstartFrameを調べ、appearAtを計算する（詳細は後述の「appearAtの決め方」参照）。
+
+### 2. Sequenceを追加
 ```tsx
+// appearAtは発話タイミングから算出した値を使用（固定間隔は不可）
 <Sequence from={開始フレーム} durationInFrames={表示時間}>
   <BulletList
     items={[
       { text: "項目1", appearAt: 0 },
-      { text: "項目2", appearAt: 20 },
-      { text: "項目3", appearAt: 45 },
+      { text: "項目2", appearAt: 67 },
+      { text: "項目3", appearAt: 127 },
     ]}
   />
 </Sequence>
 ```
 
-### 2. 効果音を追加（各項目の出現タイミング）
+### 3. 効果音を追加（appearAtと同じ値を使用）
 ```tsx
-// BulletList効果音の配列に追加
-{ base: 開始フレーム, appears: [0, 20, 45] },
+// BulletList効果音の配列に追加（appearAtと必ず一致させる）
+{ base: 開始フレーム, appears: [0, 67, 127] },
 ```
 効果音: `決定ボタンを押す1.mp3` (volume: 0.8)
 
@@ -61,7 +65,48 @@ const BULLET_END = 終了フレーム;
 )
 ```
 
-## appearAtの決め方
-- telop-data.tsの各テロップのstartFrameを確認
-- 該当テロップの開始フレーム - BulletListのSequence開始フレーム = appearAt
-- 話者が各項目を話し始めるタイミングに合わせる
+## appearAtの決め方（必須手順）
+
+各項目のappearAtは **話者の発話タイミングに同期** させること。固定間隔（0, 15, 30...）での配置は禁止。
+
+### 手順
+
+1. `src/telop-data.ts` から、箇条書きの各項目に対応するテロップを特定する
+2. 各テロップの `startFrame` を取得する
+3. `appearAt = テロップのstartFrame - BulletListのSequence開始フレーム(from)` で計算する
+
+### 例
+
+telop-data.tsに以下がある場合:
+```typescript
+{ text: "・何がヤバいかを一言で言語化する", startFrame: 4776 },
+{ text: "・最小の修正を入れる", startFrame: 4826 },
+{ text: "・再発防止を仕組みにする", startFrame: 4880 },
+```
+
+Sequence `from=4776` なら:
+```tsx
+<Sequence from={4776} durationInFrames={192}>
+  <BulletList
+    items={[
+      { text: "何がヤバいかを一言で言語化する", appearAt: 0 },       // 4776 - 4776 = 0
+      { text: "最小の修正を入れる", appearAt: 50 },                  // 4826 - 4776 = 50
+      { text: "再発防止を仕組みにする", appearAt: 104 },             // 4880 - 4776 = 104
+    ]}
+  />
+</Sequence>
+```
+
+### 1つのテロップ内に複数項目が列挙されている場合
+
+対応するテロップが1つしかない場合（例: 「変数名を直す、関数を分ける、整形を入れる」が1テロップ）は、そのテロップの表示時間をアイテム数で等分する:
+```
+appearAt = (テロップの表示フレーム数 / アイテム数) × アイテムのインデックス
+```
+
+### BULLET_SE_TIMINGSも同期する
+
+効果音のタイミングもappearAtと一致させること:
+```tsx
+{ base: 4776, appears: [0, 50, 104] },  // appearAtと同じ値
+```

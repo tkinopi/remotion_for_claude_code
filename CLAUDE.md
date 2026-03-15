@@ -134,8 +134,10 @@ TelopVideo.tsxの定数配列で制御:
 | 12 | 箇条書きリスト | bullet-list | BulletList.tsx, TelopVideo.tsx |
 | 13 | ステップフロー | step-flow | StepFlow.tsx, TelopVideo.tsx |
 | 14 | ダイアグラム作成 | diagram-illustration | 各Diagram.tsx, TelopVideo.tsx |
+| 15 | プロモーションバッジ | promo-badge | TelopVideo.tsx |
 
 **注意**: ダイアグラムは動画内容に応じて都度設計。既存コンポーネントのパターンを参考に新規作成する。
+**注意**: プロモーションバッジ(LINE登録・スキルシート・ClaudeConfig・いいねコメント)は最後に配置する。効果音も同時に追加する。
 
 ## フェーズ5: 音響
 **担当: 単体Agent**
@@ -173,9 +175,10 @@ npx remotion render src/index.ts telop-video out/output.mp4 --codec h264
 
 ### Agent 4: ビジュアル補助Agent
 - **入力**: Agent 3の出力
-- **スキル**: fullscreen-image, bullet-list, step-flow, diagram-illustration
-- **出力**: ダイアグラム・画像・箇条書き追加済みTelopVideo.tsx
+- **スキル**: fullscreen-image, bullet-list, step-flow, diagram-illustration, promo-badge
+- **出力**: ダイアグラム・画像・箇条書き・プロモバッジ追加済みTelopVideo.tsx
 - **備考**: ダイアグラムは動画内容をユーザーと相談しながら設計
+- **備考**: promo-badgeは最後に適用（LINE登録・スキルシート・ClaudeConfig・いいねコメント + 効果音）
 
 ### Agent 5: 音響Agent
 - **入力**: Agent 4の出力

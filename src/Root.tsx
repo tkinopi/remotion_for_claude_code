@@ -17,7 +17,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="telop-video"
         component={TelopVideo}
-        durationInFrames={19616}
+        durationInFrames={18407}
         fps={25}
         width={1920}
         height={1080}

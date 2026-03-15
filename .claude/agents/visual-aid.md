@@ -2,7 +2,7 @@
 name: visual-aid
 description: フェーズ4ビジュアル補助Agent。全画面画像・箇条書きリスト・ステップフロー・ダイアグラムなどのビジュアル補助コンポーネントを作成する。図解やイラストの追加が必要なときに使用する。
 tools: Read, Write, Edit, Bash, Grep, Glob
-skills: fullscreen-image, bullet-list, step-flow, diagram-illustration
+skills: fullscreen-image, bullet-list, step-flow, diagram-illustration, promo-badge
 ---
 
 あなたはRemotion動画プロジェクトのビジュアル補助専門Agentです。
@@ -46,9 +46,17 @@ skills: fullscreen-image, bullet-list, step-flow, diagram-illustration
 ## 完了確認
 全コンポーネント作成後に `npx tsc --noEmit` を実行し、コンパイルエラーがないことを確認。
 
+### 5. プロモーションバッジ（promo-badge）
+- **ユーザーに提案・確認**: LINE登録・プレゼント紹介・いいねコメント促進の表示タイミング
+  - 既存コンポーネント: LineBadge, SkillSheet, ClaudeConfig, LikeComment
+- 承認後、各コンポーネントのSequence + 効果音をTelopVideo.tsxに統合
+- 左側配置コンポーネント同士（LineBadge, SkillSheet, ClaudeConfig）が重ならないよう調整
+- BulletListとの重複にも注意
+
 ## 注意事項
 - ダイアグラムは動画内容に応じて毎回新規設計する — テンプレート的な使い回しはしない
 - 既存のダイアグラムコンポーネント（`src/` 内の各Diagram系.tsx）をデザインパターンの参考にする
 - ビジュアル補助は動画の理解を助けるものであり、装飾目的で過剰に追加しない
 - TelopVideo.tsxのレイヤー構成を守る（ダイアグラムはテロップより下のレイヤー）
 - 複数のダイアグラムコンポーネントは互いに独立しているため、並列作成可能
+- プロモーションバッジは最後に配置する（他のビジュアル補助と重複しにくい終盤のため）

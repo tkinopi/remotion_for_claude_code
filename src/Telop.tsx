@@ -79,7 +79,7 @@ export const Telop: React.FC<TelopProps> = ({ text, mono, variant }) => {
           <React.Fragment key={i}>
             {i > 0 && <br />}
             {parseMarkup(line).map((seg, j) =>
-              seg.color ? (
+              seg.color && v !== "mono" ? (
                 <span key={j} style={{ color: seg.color }}>
                   {seg.text}
                 </span>

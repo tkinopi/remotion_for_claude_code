@@ -83,7 +83,7 @@ export const VideoTitle: React.FC<VideoTitleProps> = ({ durationInFrames }) => {
               letterSpacing: 1,
             }}
           >
-            「Python終了」って言ってる人。正直、9割ズレてます
+            「これ書いた人、誰だよ…」現場のヤバいコード7選
           </div>
         </div>
       </div>
